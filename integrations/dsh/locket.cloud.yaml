@@ -1,0 +1,13 @@
+# Pass this file to: dsh web --patch ./locket.cloud.yaml
+# Supply your own LOCKET_MCP_TOKEN through the launch environment or credential provider.
+- insert:
+    - id: memory-locket
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: locket
+        transport: streamable-http
+        url: https://memory.example.com/mcp
+        expandTemplates: true
+        headers:
+          Authorization: 'Bearer ${credential:LOCKET_MCP_TOKEN}'
+        failOnStartupError: true

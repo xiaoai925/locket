@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Locket 记忆格式图集</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;900&display=swap">
+<style>
+/* Layout: single reading column; each figure is a plate with number, claim, drawing, caption.
+   Blue = normative / main / long-term memory; amber = session / change; red = conflict or deletion. */
+:root {
+  --bg: #F3F5F8;
+  --surface: #FFFFFF;
+  --band: #E7EBF1;
+  --fg: #18202C;
+  --muted: #5A6476;
+  --line: #B9C2D0;
+  --main: #2850C8;
+  --main-soft: #E5EBFB;
+  --sess: #A85F00;
+  --sess-soft: #FBEFDC;
+  --danger: #C2362B;
+  --danger-soft: #FBE7E5;
+  --display: "Noto Serif SC", "Songti SC", "SimSun", serif;
+  --sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #10141B; --surface: #181E28; --band: #1D2431; --fg: #E4E8EF; --muted: #9AA4B5;
+    --line: #3C475A; --main: #86A5FF; --main-soft: #1C2644; --sess: #F2A94A; --sess-soft: #33270F;
+    --danger: #FF7B6E; --danger-soft: #3A1C1A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #10141B; --surface: #181E28; --band: #1D2431; --fg: #E4E8EF; --muted: #9AA4B5;
+  --line: #3C475A; --main: #86A5FF; --main-soft: #1C2644; --sess: #F2A94A; --sess-soft: #33270F;
+  --danger: #FF7B6E; --danger-soft: #3A1C1A; color-scheme: dark;
+}
+
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--sans); font-size: 15px; line-height: 1.7; margin: 0;
+}
+.wrap {
+  max-width: 1040px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 40px 72px;
+  display: grid; gap: 56px;
+}
+header { display: grid; gap: 14px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+h1 { font-family: var(--display); font-weight: 900; font-size: clamp(34px, 6vw, 56px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h1 .ver { font-family: var(--mono); font-weight: 400; font-size: .38em; color: var(--main); vertical-align: middle; margin-left: 10px; }
+.lede { max-width: 62ch; color: var(--muted); margin: 0; }
+.key { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); }
+.key span { display: inline-flex; align-items: center; gap: 8px; }
+.sw { width: 22px; height: 4px; border-radius: 2px; display: inline-block; }
+.sw.main { background: var(--main); } .sw.sess { background: var(--sess); } .sw.danger { background: var(--danger); }
+
+nav ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px 20px; }
+nav a { color: var(--fg); text-decoration: none; display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+nav a:hover, nav a:focus-visible { color: var(--main); outline: none; }
+nav a b { font-family: var(--mono); font-weight: 600; color: var(--main); min-width: 3em; }
+
+.part { font-family: var(--display); font-weight: 600; font-size: 13px; letter-spacing: .12em; color: var(--muted); border-top: 2px solid var(--fg); padding-top: 10px; margin-bottom: -32px; }
+
+section { display: grid; gap: 14px; scroll-margin-top: 20px; }
+.fig-head { display: grid; gap: 4px; }
+.fig-no { font-family: var(--mono); font-size: 12px; color: var(--main); letter-spacing: .06em; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.3; margin: 0; text-wrap: balance; }
+.claim { margin: 0; color: var(--muted); max-width: 66ch; }
+.claim code { font-family: var(--mono); font-size: .92em; color: var(--fg); }
+figure { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+.scroll { overflow-x: auto; padding: 20px; }
+.scroll svg { display: block; width: 100%; min-width: 760px; height: auto; }
+figcaption { border-top: 1px solid var(--line); padding: 12px 20px; font-size: 13.5px; color: var(--muted); }
+figcaption code { font-family: var(--mono); font-size: .92em; color: var(--fg); }
+
+/* SVG vocabulary */
+svg text { fill: var(--fg); font-family: var(--sans); font-size: 13px; }
+svg .t-title { font-weight: 700; font-size: 13.5px; }
+svg .t-sub { fill: var(--muted); font-size: 12px; }
+svg .t-mono { font-family: var(--mono); font-size: 12px; }
+svg .t-band { font-family: var(--display); font-weight: 600; font-size: 15px; }
+svg .t-main { fill: var(--main); } svg .t-sess { fill: var(--sess); } svg .t-danger { fill: var(--danger); }
+svg .t-inv { fill: var(--surface); font-weight: 700; font-size: 12px; }
+svg .t-strike { text-decoration: line-through; fill: var(--muted); }
+svg .band { fill: var(--band); }
+svg .box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+svg .box-main { fill: var(--main-soft); stroke: var(--main); stroke-width: 1.5; }
+svg .box-sess { fill: var(--sess-soft); stroke: var(--sess); stroke-width: 1.5; }
+svg .box-danger { fill: var(--danger-soft); stroke: var(--danger); stroke-width: 1.5; }
+svg .ghost { stroke-dasharray: 5 4; }
+svg .edge { stroke: var(--muted); stroke-width: 1.5; fill: none; }
+svg .edge-main { stroke: var(--main); stroke-width: 1.5; fill: none; }
+svg .edge-sess { stroke: var(--sess); stroke-width: 1.5; fill: none; }
+svg .edge-danger { stroke: var(--danger); stroke-width: 1.5; fill: none; }
+svg .lane { stroke-width: 3; }
+svg .dashed { stroke-dasharray: 5 4; }
+svg .axis { stroke: var(--muted); stroke-width: 1; }
+svg .bar-main { fill: var(--main); } svg .bar-sess { fill: var(--sess); }
+svg .node-main { fill: var(--surface); stroke: var(--main); stroke-width: 3; }
+svg .node-sess { fill: var(--surface); stroke: var(--sess); stroke-width: 3; }
+svg .ring { fill: none; stroke: var(--danger); stroke-width: 2; stroke-dasharray: 4 3; }
+svg .pill-main { fill: var(--main); } svg .pill-sess { fill: var(--sess); }
+svg .divider { stroke: var(--line); stroke-width: 1; }
+svg .m-muted { fill: var(--muted); } svg .m-main { fill: var(--main); } svg .m-sess { fill: var(--sess); } svg .m-danger { fill: var(--danger); }
+.defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* tables */
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 14px; }
+th, td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+thead th { font-weight: 700; font-size: 13px; background: var(--band); }
+thead th small { display: block; font-weight: 400; color: var(--muted); font-family: var(--mono); font-size: 11.5px; line-height: 1.5; }
+td.c { text-align: center; font-family: var(--mono); }
+td code { font-family: var(--mono); font-size: 13px; }
+.yes { color: var(--main); font-weight: 700; }
+.no { color: var(--muted); }
+.lock { color: var(--danger); font-weight: 700; }
+.lvl { display: inline-block; font-family: var(--mono); font-size: 12px; padding: 1px 8px; border-radius: 10px; border: 1px solid var(--line); }
+.lvl.public { color: var(--main); border-color: var(--main); }
+.lvl.personal { color: var(--fg); }
+.lvl.sensitive { color: var(--sess); border-color: var(--sess); }
+.lvl.secret { color: var(--danger); border-color: var(--danger); }
+
+/* conformance levels */
+.levels { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.levels > div { padding: 18px 18px 20px; border-right: 1px solid var(--line); display: grid; gap: 8px; align-content: start; min-width: 0; }
+.levels > div:last-child { border-right: 0; }
+.levels .tag { font-family: var(--mono); font-weight: 600; color: var(--main); font-size: 13px; }
+.levels h3 { font-family: var(--display); font-weight: 600; font-size: 17px; margin: 0; }
+.levels ul { margin: 0; padding-left: 1.1em; font-size: 13.5px; }
+.levels .inherit { font-size: 12px; color: var(--muted); font-family: var(--mono); }
+.levels .bar { height: 6px; border-radius: 3px; background: var(--main); }
+@media (max-width: 760px) {
+  .levels { grid-template-columns: 1fr 1fr; }
+  .levels > div { border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 460px) { .levels { grid-template-columns: 1fr; } }
+
+pre.tree { margin: 0; padding: 20px; overflow-x: auto; font-family: var(--mono); font-size: 13px; line-height: 1.75; color: var(--fg); }
+pre.tree .c { color: var(--muted); }
+pre.tree .g { color: var(--main); }
+pre.tree .s { color: var(--sess); }
+pre.tree .r { color: var(--danger); }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.split > pre + pre { border-left: 1px solid var(--line); }
+@media (max-width: 760px) { .split { grid-template-columns: 1fr; } .split > pre + pre { border-left: 0; border-top: 1px solid var(--line); } }
+
+pre.mermaid { margin: 0; padding: 20px; overflow-x: auto; background: transparent; text-align: center; font-family: var(--sans); }
+
+footer { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="m-muted"/></marker>
+    <marker id="ar-main" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="m-main"/></marker>
+    <marker id="ar-sess" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="m-sess"/></marker>
+    <marker id="ar-danger" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="m-danger"/></marker>
+  </defs>
+</svg>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Portable Memory Format（PMF）规范草案 v0.2 · 对应 SPEC.md</div>
+  <h1>Locket<span class="ver">PMF 0.2</span></h1>
+  <p class="lede">Locket 是 PMF 的参考实现。PMF 是一种开放的 AI 记忆仓库格式。记忆仓库就是一个普通的 Git 仓库，归用户所有；任何 AI 只要遵守格式，就能读写同一份记忆。规范只规定数据长什么样、操作留下什么记录，不规定 AI 怎么判断。</p>
+  <div class="key">
+    <span><i class="sw main"></i>规范定义 · main · 长期记忆</span>
+    <span><i class="sw sess"></i>会话分支 · 变化</span>
+    <span><i class="sw danger"></i>冲突 · 删除</span>
+  </div>
+</header>
+
+<nav aria-label="图目录">
+  <ol>
+    <li><a href="#fig-hub"><b>图 1</b>一个仓库，多个 AI</a></li>
+    <li><a href="#fig-layers"><b>图 2</b>规范的分层</a></li>
+    <li><a href="#fig-layout"><b>图 3</b>仓库布局与记忆文件</a></li>
+    <li><a href="#fig-why"><b>图 4</b>来源链</a></li>
+    <li><a href="#fig-change"><b>图 5</b>认知更正与世界变化</a></li>
+    <li><a href="#fig-pr"><b>图 6</b>会话分支即 Pull Request</a></li>
+    <li><a href="#fig-session"><b>图 7</b>一次会话的时序</a></li>
+    <li><a href="#fig-conflict"><b>图 8</b>冲突的记录与解决</a></li>
+    <li><a href="#fig-lifecycle"><b>图 9</b>记忆的生命周期</a></li>
+    <li><a href="#fig-tombstone"><b>图 10</b>墓碑传播删除</a></li>
+    <li><a href="#fig-scope"><b>图 11</b>权限范围与视图</a></li>
+    <li><a href="#fig-levels"><b>图 12</b>一致性等级</a></li>
+    <li><a href="#fig-arch"><b>图 13</b>云上记忆存储的架构</a></li>
+    <li><a href="#fig-usecase"><b>图 14</b>谁用它做什么（用例）</a></li>
+    <li><a href="#fig-tenancy"><b>图 15</b>一次多租户请求</a></li>
+  </ol>
+</nav>
+
+<div class="part">一 · 定位</div>
+
+<!-- 1 -->
+<section id="fig-hub">
+  <div class="fig-head">
+    <span class="fig-no">图 1 · 定位</span>
+    <h2>一个仓库，多个 AI</h2>
+    <p class="claim">记忆不再锁在某个 AI 产品里。仓库放在用户选择的地方，不同厂商、不同能力等级的 AI 通过同一套接口读写，用户负责签名、批准和删除。</p>
+  </div>
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 960 390" role="img" aria-label="中心是用户拥有的记忆仓库。所有者在上方签名并批准合并；左侧两个不同厂商的 AI 通过工具接口读写；右侧本地小模型只读，托管位置通过 push 和 pull 同步；下方其他系统的记忆通过 import 迁入。">
+        <rect class="box" x="400" y="20" width="160" height="54" rx="5"/>
+        <text class="t-title" x="480" y="43" text-anchor="middle">所有者（用户）</text>
+        <text class="t-sub" x="480" y="62" text-anchor="middle">签名 · 批准合并 · 删除</text>
+        <line class="edge-main" x1="480" y1="74" x2="480" y2="118" marker-end="url(#ar-main)"/>
+        <text class="t-mono t-main" x="488" y="102">签名提交 / 批准</text>
+
+        <rect class="box-main" x="380" y="120" width="200" height="160" rx="6"/>
+        <text class="t-title" x="480" y="150" text-anchor="middle">记忆仓库</text>
+        <text class="t-sub" x="480" y="172" text-anchor="middle">普通 Git 仓库 · 归用户所有</text>
+        <text class="t-mono" x="480" y="208" text-anchor="middle">.pmf/  conflicts/</text>
+        <text class="t-mono" x="480" y="228" text-anchor="middle">self/  projects/  world/</text>
+        <text class="t-mono" x="480" y="248" text-anchor="middle">procedures/  episodes/</text>
+
+        <rect class="box" x="40" y="130" width="200" height="54" rx="5"/>
+        <text class="t-title" x="140" y="153" text-anchor="middle">Claude Code</text>
+        <text class="t-sub" x="140" y="172" text-anchor="middle">L2 · 写会话分支</text>
+        <line class="edge" x1="240" y1="157" x2="378" y2="157" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="309" y="149" text-anchor="middle">recall / remember</text>
+
+        <rect class="box" x="40" y="216" width="200" height="54" rx="5"/>
+        <text class="t-title" x="140" y="239" text-anchor="middle">另一家的 AI 助手</text>
+        <text class="t-sub" x="140" y="258" text-anchor="middle">L1 · 写会话分支</text>
+        <line class="edge" x1="240" y1="243" x2="378" y2="243" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="309" y="235" text-anchor="middle">MCP 工具接口</text>
+
+        <rect class="box" x="720" y="130" width="200" height="54" rx="5"/>
+        <text class="t-title" x="820" y="153" text-anchor="middle">本地小模型</text>
+        <text class="t-sub" x="820" y="172" text-anchor="middle">L0 · 只读</text>
+        <line class="edge dashed" x1="720" y1="157" x2="582" y2="157" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="651" y="149" text-anchor="middle">受 scope 限制</text>
+
+        <rect class="box" x="720" y="216" width="200" height="54" rx="5"/>
+        <text class="t-title" x="820" y="239" text-anchor="middle">托管位置</text>
+        <text class="t-sub" x="820" y="258" text-anchor="middle">GitHub · 自建服务器 · 本机</text>
+        <line class="edge" x1="718" y1="243" x2="584" y2="243" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="651" y="235" text-anchor="middle">push / pull</text>
+
+        <line class="edge" x1="480" y1="320" x2="480" y2="282" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="488" y="306">import</text>
+        <rect class="box ghost" x="380" y="322" width="200" height="50" rx="5"/>
+        <text class="t-title" x="480" y="343" text-anchor="middle">其他系统的记忆</text>
+        <text class="t-sub" x="480" y="361" text-anchor="middle">各家导出 · mem0 · Letta</text>
+      </svg>
+    </div>
+    <figcaption>同步直接用 <code>git push / pull</code>，不需要额外协议。每个 AI 声明自己达到的一致性等级（图 12），能做的事情随等级不同。</figcaption>
+  </figure>
+</section>
+
+<!-- 2 -->
+<section id="fig-layers">
+  <div class="fig-head">
+    <span class="fig-no">图 2 · 定位</span>
+    <h2>规范的分层：只定义中间三层</h2>
+    <p class="claim">底层直接复用 Git，顶层的策略交给实现去竞争。规范只规定中间三层，这是不同实现之间互通所需的最小约定。</p>
+  </div>
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 960 320" role="img" aria-label="五层结构：第 4 层策略由实现自选；第 3 层 Agent 接口、第 2 层操作约定、第 1 层内容格式由规范定义；第 0 层直接复用 Git。">
+        <rect class="box ghost" x="20" y="20" width="640" height="52" rx="5"/>
+        <text class="t-band" x="40" y="52">第 4 层 · 策略</text>
+        <text class="t-sub" x="220" y="51">检索排序 · 冲突裁决 · 遗忘时机 · 摘要写法</text>
+        <rect class="box ghost" x="680" y="20" width="260" height="52" rx="5"/>
+        <text class="t-title" x="810" y="51" text-anchor="middle">不规定 · 实现之间竞争</text>
+
+        <rect class="box" x="20" y="80" width="640" height="52" rx="5"/>
+        <text class="t-band" x="40" y="112">第 3 层 · Agent 接口</text>
+        <text class="t-sub t-mono" x="220" y="111">memory.recall / remember / why / forget …</text>
+        <rect class="box-main" x="680" y="80" width="260" height="52" rx="5"/>
+        <text class="t-title t-main" x="810" y="111" text-anchor="middle">规范 §8</text>
+
+        <rect class="box" x="20" y="140" width="640" height="52" rx="5"/>
+        <text class="t-band" x="40" y="172">第 2 层 · 操作约定</text>
+        <text class="t-sub" x="220" y="171">提交说明 trailer · 分支 · 冲突文件 · 墓碑</text>
+        <rect class="box-main" x="680" y="140" width="260" height="52" rx="5"/>
+        <text class="t-title t-main" x="810" y="171" text-anchor="middle">规范 §5 – §7</text>
+
+        <rect class="box" x="20" y="200" width="640" height="52" rx="5"/>
+        <text class="t-band" x="40" y="232">第 1 层 · 内容格式</text>
+        <text class="t-sub" x="220" y="231">目录约定 · 记忆文件 front matter · 来源</text>
+        <rect class="box-main" x="680" y="200" width="260" height="52" rx="5"/>
+        <text class="t-title t-main" x="810" y="231" text-anchor="middle">规范 §3 – §4</text>
+
+        <rect class="band" x="20" y="260" width="640" height="52" rx="5"/>
+        <text class="t-band" x="40" y="292">第 0 层 · Git</text>
+        <text class="t-sub" x="220" y="291">对象 · 引用 · 同步 · 签名</text>
+        <rect class="band" x="680" y="260" width="260" height="52" rx="5"/>
+        <text class="t-title" x="810" y="291" text-anchor="middle">直接复用，不重新定义</text>
+      </svg>
+    </div>
+    <figcaption>v0.1 自己实现了一套和 Git 兼容的对象库；v0.2 不再这样做，仓库本身就是 Git 仓库。实现者只需要会读写 Git 和 Markdown。</figcaption>
+  </figure>
+</section>
+
+<div class="part">二 · 数据</div>
+
+<!-- 3 -->
+<section id="fig-layout">
+  <div class="fig-head">
+    <span class="fig-no">图 3 · 数据</span>
+    <h2>仓库布局与一条记忆文件</h2>
+    <p class="claim">一个文件只表达一条记忆。<code>id</code> 是记忆的身份，路径只用来组织；整理目录不会改变记忆的身份。</p>
+  </div>
+  <figure>
+    <div class="split">
+<pre class="tree"><span class="g">&lt;repo&gt;/</span>                    <span class="c"># 普通 Git 仓库</span>
+├── <span class="g">.pmf/</span>
+│   ├── config.toml          <span class="c"># 规范版本 · 所有者 · 策略</span>
+│   ├── views.toml           <span class="c"># 导出视图</span>
+│   ├── <span class="r">tombstones.jsonl</span>     <span class="c"># 删除记录</span>
+│   └── recipients.toml      <span class="c"># 加密公钥</span>
+├── self/                    <span class="c"># 关于所有者本人</span>
+├── people/&lt;slug&gt;/
+├── projects/&lt;slug&gt;/
+├── world/
+├── procedures/
+├── episodes/YYYY/MM/
+├── <span class="r">conflicts/</span>               <span class="c"># 未解决的冲突</span>
+└── <span class="s">x-&lt;vendor&gt;/</span>              <span class="c"># 厂商扩展，必须原样保留</span>
+
+<span class="c"># 不进仓库的本地派生数据</span>
+.git/pmf/                    <span class="c"># 索引 · embedding · 访问统计</span></pre>
+<pre class="tree"><span class="c"># self/preferences/language.md</span>
+---
+<span class="g">pmf:</span> 0.2
+<span class="g">id:</span> 01JBQ7Z4K8M3V2X9N6T5R0WSEA   <span class="c"># 身份，永不改变</span>
+<span class="g">type:</span> preference
+<span class="g">about:</span> self
+<span class="g">created:</span> 2026-10-30T17:30:00+08:00
+<span class="g">sources:</span>                          <span class="c"># 至少一条</span>
+  - kind: conversation
+    session: claude-code/38dfad8f
+    quote: "我习惯用中文交流"
+valid_from: 2026-10-30             <span class="c"># 现实中成立的时间</span>
+confidence: 0.9
+sensitivity: personal
+tags: [language]
+<span class="s">x-acme-weight:</span> 3                  <span class="c"># 不认识也必须保留</span>
+---
+用户偏好用中文交流，技术术语保留英文原文。</pre>
+    </div>
+    <figcaption>蓝色字段是必填字段。“不认识的字段和目录必须原样保留”这条前向兼容规则，决定了开放格式能否长期存活。</figcaption>
+  </figure>
+</section>
+
+<!-- 4 -->
+<section id="fig-why">
+  <div class="fig-head">
+    <span class="fig-no">图 4 · 数据</span>
+    <h2>来源链：每条记忆都能追溯到原始对话</h2>
+    <p class="claim"><code>memory.why(id)</code> 沿着 <code>derived_from</code> 和 <code>sources</code> 一路回溯，同时用 Git 签名说明每一步是谁写入的。</p>
+  </div>
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 960 320" role="img" aria-label="一条摘要记忆由两条原子记忆推导而来，每条原子记忆又各自指向一次原始对话和其中的原话；每条记忆都标注了签名者。">
+        <text class="t-sub" x="140" y="24" text-anchor="middle">摘要记忆</text>
+        <text class="t-sub" x="450" y="24" text-anchor="middle">原子记忆</text>
+        <text class="t-sub" x="790" y="24" text-anchor="middle">原始来源</text>
+
+        <rect class="box-main" x="30" y="130" width="220" height="80" rx="5"/>
+        <text class="t-title" x="140" y="155" text-anchor="middle">用户的工作习惯</text>
+        <text class="t-sub t-mono" x="140" y="175" text-anchor="middle">type: summary</text>
+        <text class="t-sub" x="140" y="195" text-anchor="middle">签名：alice（已批准）</text>
+
+        <line class="edge" x1="250" y1="155" x2="328" y2="90" marker-end="url(#ar)"/>
+        <line class="edge" x1="250" y1="185" x2="328" y2="250" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="300" y="174" text-anchor="middle">derived_from</text>
+
+        <rect class="box" x="330" y="40" width="240" height="80" rx="5"/>
+        <text class="t-title" x="450" y="65" text-anchor="middle">偏好中文交流</text>
+        <text class="t-sub t-mono" x="450" y="85" text-anchor="middle">preference · confidence 0.9</text>
+        <text class="t-sub" x="450" y="105" text-anchor="middle">签名：alice</text>
+
+        <rect class="box" x="330" y="220" width="240" height="80" rx="5"/>
+        <text class="t-title" x="450" y="245" text-anchor="middle">用 py -3 运行 Python</text>
+        <text class="t-sub t-mono" x="450" y="265" text-anchor="middle">procedure · confidence 1.0</text>
+        <text class="t-sub" x="450" y="285" text-anchor="middle">签名：claude-code（Agent）</text>
+
+        <line class="edge" x1="570" y1="80" x2="648" y2="80" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="609" y="72" text-anchor="middle">sources</text>
+        <line class="edge" x1="570" y1="260" x2="648" y2="260" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="609" y="252" text-anchor="middle">sources</text>
+
+        <rect class="box-sess" x="650" y="40" width="280" height="80" rx="5"/>
+        <text class="t-title t-mono" x="790" y="65" text-anchor="middle">claude-code/38dfad8f</text>
+        <text class="t-sub" x="790" y="85" text-anchor="middle">对话 · 2026-10-30 17:28</text>
+        <text x="790" y="105" text-anchor="middle">“我习惯用中文交流”</text>
+
+        <rect class="box-sess" x="650" y="220" width="280" height="80" rx="5"/>
+        <text class="t-title t-mono" x="790" y="245" text-anchor="middle">claude-code/12ab90c4</text>
+        <text class="t-sub" x="790" y="265" text-anchor="middle">对话 · 2026-10-12 10:05</text>
+        <text x="790" y="285" text-anchor="middle">“python 是商店占位符，用 py”</text>
+      </svg>
+    </div>
+    <figcaption>推断得出的记忆（<code>kind: inference</code>）必须列出所依据的记忆 id，所以“AI 为什么这样认为”总能追溯到具体的原话。签名区分了“用户确认过的”和“Agent 自己写的”。</figcaption>
+  </figure>
+</section>
+
+<!-- 5 -->
+<section id="fig-change">
+  <div class="fig-head">
+    <span class="fig-no">图 5 · 数据</span>
+    <h2>认知更正与世界变化</h2>
+    <p class="claim">Git 历史回答“我们曾经以为什么”，<code>valid_from / valid_to</code> 回答“现实中什么时候是这样”。两种变化必须用不同方式记录。</p>
+  </div>
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 960 350" role="img" aria-label="左侧：生日记错了，用 correct 提交原地修改同一个文件，当前树中只剩正确版本。右侧：用户搬家，旧记忆写上有效期截止时间，新建一条记忆并用 supersedes 指向旧记忆，时间轴上两条记忆的有效期首尾相接。">
+        <line class="divider" x1="480" y1="10" x2="480" y2="340"/>
+
+        <!-- left: correction -->
+        <text class="t-band" x="30" y="30">认知更正：之前记错了</text>
+        <text class="t-sub" x="30" y="50">同一个 id，原地修改</text>
+        <rect class="box ghost" x="40" y="70" width="400" height="70" rx="5"/>
+        <text class="t-mono t-sub" x="56" y="90">commit a1f0 · learn</text>
+        <text class="t-mono" x="56" y="110">self/birthday.md · id 01JBQ…K8</text>
+        <text class="t-strike" x="56" y="129">生日是 3 月 5 日</text>
+        <line class="edge-sess" x1="240" y1="140" x2="240" y2="196" marker-end="url(#ar-sess)"/>
+        <text class="t-mono t-sess" x="250" y="173">correct</text>
+        <rect class="box-sess" x="40" y="198" width="400" height="70" rx="5"/>
+        <text class="t-mono t-sub" x="56" y="218">commit b2c7 · correct</text>
+        <text class="t-mono" x="56" y="238">self/birthday.md · id 01JBQ…K8</text>
+        <text x="56" y="257">生日是 5 月 3 日</text>
+        <text class="t-title" x="40" y="302">当前树：只有 1 条</text>
+        <text class="t-sub" x="40" y="322">错误版本只留在 Git 历史中，可以用 memory.history 查到</text>
+
+        <!-- right: world change -->
+        <text class="t-band" x="510" y="30">世界变化：情况变了</text>
+        <text class="t-sub" x="510" y="50">旧的写上 valid_to，新建一条</text>
+        <rect class="box" x="520" y="70" width="410" height="60" rx="5"/>
+        <text class="t-mono" x="536" y="92">self/city-beijing.md · id 01JA…3C</text>
+        <text x="536" y="116">住在北京 · valid_to 2026-10</text>
+        <rect class="box-sess" x="520" y="160" width="410" height="60" rx="5"/>
+        <text class="t-mono" x="536" y="182">self/city-shanghai.md · id 01JC…7D</text>
+        <text x="536" y="206">住在上海 · valid_from 2026-11</text>
+        <line class="edge-sess" x1="600" y1="160" x2="600" y2="132" marker-end="url(#ar-sess)"/>
+        <text class="t-mono t-sess" x="610" y="150">supersedes</text>
+
+        <!-- validity timeline: 2020 -> 2028 over x 520..930 -->
+        <rect class="bar-main" x="520" y="240" width="350" height="8" rx="2"/>
+        <text class="t-sub" x="536" y="236">北京</text>
+        <rect class="bar-sess" x="874" y="254" width="56" height="8" rx="2"/>
+        <text class="t-sub t-sess" x="930" y="276" text-anchor="end">上海</text>
+        <line class="axis" x1="520" y1="284" x2="930" y2="284"/>
+        <line class="axis" x1="520" y1="280" x2="520" y2="288"/>
+        <line class="axis" x1="622" y1="280" x2="622" y2="288"/>
+        <line class="axis" x1="725" y1="280" x2="725" y2="288"/>
+        <line class="axis" x1="827" y1="280" x2="827" y2="288"/>
+        <line class="axis" x1="930" y1="280" x2="930" y2="288"/>
+        <text class="t-mono t-sub" x="520" y="302" text-anchor="middle">2020</text>
+        <text class="t-mono t-sub" x="622" y="302" text-anchor="middle">2022</text>
+        <text class="t-mono t-sub" x="725" y="302" text-anchor="middle">2024</text>
+        <text class="t-mono t-sub" x="827" y="302" text-anchor="middle">2026</text>
+        <text class="t-mono t-sub" x="930" y="302" text-anchor="end">2028</text>
+        <text class="t-title" x="520" y="330">当前树：两条都在，各有时间范围</text>
+      </svg>
+    </div>
+    <figcaption>认知更正用 <code>correct</code> 提交，世界变化用 <code>learn</code> 提交。“用户 2020 到 2026 年住在北京”仍然是有效知识，所以不能被覆盖。这是 Zep/Graphiti 也在用的双时态模型。</figcaption>
+  </figure>
+</section>
+
+<div class="part">三 · 操作</div>
+
+<!-- 6 -->
+<section id="fig-pr">
+  <div class="fig-head">
+    <span class="fig-no">图 6 · 操作</span>
+    <h2>会话分支就是 AI 提交给用户的 Pull Request</h2>
+    <p class="claim">AI 只能写自己的会话分支。合并进 main 要经过所有者批准，可以按规则自动通过。发现冲突时合并照常完成，冲突另外记录，等用户确认。</p>
+  </div>
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 960 320" role="img" aria-label="提交图：Claude Code 的会话分支按规则自动批准合并；另一个 AI 的会话分支由用户批准合并，合并时发现冲突，冲突被记录在 conflicts 目录，之后用户确认并提交 resolve。">
+        <path class="edge-main lane" d="M60 90 H900"/>
+        <path class="edge-sess lane" d="M60 90 C110 90 110 180 170 180 H260 C320 180 320 90 380 90"/>
+        <path class="edge-sess lane" d="M60 90 C150 90 150 260 240 260 H420 C480 260 480 90 540 90"/>
+
+        <rect class="pill-main" x="284" y="124" width="76" height="22" rx="11"/>
+        <text class="t-inv" x="322" y="139" text-anchor="middle">规则批准</text>
+        <rect class="pill-main" x="444" y="164" width="72" height="22" rx="11"/>
+        <text class="t-inv" x="480" y="179" text-anchor="middle">用户批准</text>
+
+        <circle class="node-main" cx="60" cy="90" r="9"/>
+        <circle class="node-main" cx="380" cy="90" r="9"/>
+        <circle class="ring" cx="540" cy="90" r="16"/>
+        <circle class="node-main" cx="540" cy="90" r="9"/>
+        <circle class="node-main" cx="760" cy="90" r="9"/>
+        <circle class="node-main" cx="860" cy="90" r="9"/>
+        <text class="t-title t-main" x="60" y="62" text-anchor="middle">main · 长期记忆</text>
+        <text class="t-mono" x="380" y="66" text-anchor="middle">merge</text>
+        <text class="t-mono" x="540" y="62" text-anchor="middle">merge</text>
+        <text class="t-mono" x="760" y="66" text-anchor="middle">resolve</text>
+        <text class="t-mono" x="860" y="66" text-anchor="middle">squash</text>
+
+        <circle class="node-sess" cx="170" cy="180" r="9"/>
+        <circle class="node-sess" cx="260" cy="180" r="9"/>
+        <circle class="node-sess" cx="240" cy="260" r="9"/>
+        <circle class="node-sess" cx="420" cy="260" r="9"/>
+        <text class="t-mono t-sub" x="170" y="206" text-anchor="middle">learn</text>
+        <text class="t-mono t-sub" x="260" y="206" text-anchor="middle">learn</text>
+        <text class="t-mono t-sub" x="240" y="286" text-anchor="middle">learn</text>
+        <text class="t-mono t-sub" x="420" y="286" text-anchor="middle">correct</text>
+        <text class="t-mono t-sess" x="215" y="230" text-anchor="middle">session/claude-code/a1</text>
+        <text class="t-mono t-sess" x="330" y="308" text-anchor="middle">session/other-ai/b7</text>
+
+        <line class="edge-danger dashed" x1="546" y1="99" x2="596" y2="148" marker-end="url(#ar-danger)"/>
+        <rect class="box-danger" x="570" y="150" width="150" height="46" rx="5"/>
+        <text class="t-title t-danger" x="645" y="169" text-anchor="middle">conflicts/ · open</text>
+        <text class="t-sub" x="645" y="187" text-anchor="middle">两条记忆都保留</text>
+        <line class="edge-danger dashed" x1="694" y1="150" x2="753" y2="98" marker-end="url(#ar-danger)"/>
+        <text class="t-sub" x="744" y="140">用户确认</text>
+      </svg>
+    </div>
+    <figcaption>批准规则写在 <code>.pmf/config.toml</code>，例如“<code>personal</code> 及以下级别的 <code>learn</code> 自动通过”。冲突只是被记录下来，不会卡住合并。</figcaption>
+  </figure>
+</section>
+
+<!-- 7 -->
+<section id="fig-session">
+  <div class="fig-head">
+    <span class="fig-no">图 7 · 操作</span>
+    <h2>一次会话的时序</h2>
+    <p class="claim">AI 只调用标准工具接口，不需要懂 Git。读取遵守权限范围，写入只落在自己的会话分支上。</p>
+  </div>
+  <figure>
+<pre class="mermaid">
+sequenceDiagram
+  participant A as AI Agent
+  participant T as 工具接口
+  participant G as 记忆仓库
+  participant O as 所有者
+  A->>T: memory.recall 用户的开发环境
+  T->>G: 读 main 当前树，按 scope 过滤
+  T-->>A: 记忆，以及相关的未解决冲突
+  A->>T: memory.remember 偏好中文，sources 为本次对话
+  T->>G: 在 session/claude-code/38df 上提交 learn
+  A->>T: memory.why 01JBQ7
+  T-->>A: 来源链与修改历史
+  A->>T: memory.end_session 本次摘要
+  T->>G: 提交并发起合并请求
+  G->>O: 待批准的会话分支
+  O->>G: 批准或按规则自动通过，合并进 main
+</pre>
+    <figcaption>接口用 JSON Schema 定义，可以直接映射为 MCP 工具：<code>recall</code> <code>get</code> <code>remember</code> <code>update</code> <code>forget</code> <code>why</code> <code>history</code> <code>conflicts</code> <code>end_session</code>。</figcaption>
+  </figure>
+</section>
+
+<!-- 8 -->
+<section id="fig-conflict">
+  <div class="fig-head">
+    <span class="fig-no">图 8 · 操作</span>
+    <h2>冲突的记录与解决</h2>
+    <p class="claim">规范不规定怎么判断冲突、怎么裁决，只规定冲突一旦被发现，必须用统一的文件记录下来。这样谁都可以接手解决。</p>
+  </div>
+  <figure>
+<pre class="mermaid">
+flowchart TD
+  A["任一实现发现矛盾"] --> B["两条记忆都保留在树中"]
+  B --> C["写入 conflicts/ 冲突文件，status 为 open"]
+  C --> D{"类型在 auto_resolve 中？默认只有 supersede"}
+  D -- 是 --> R["resolve 提交"]
+  D -- 否 --> E["recall 时随结果一起返回冲突"]
+  E --> F{"由谁解决"}
+  F -- 用户直接确认 --> R
+  F -- 另一个 AI 或实现 --> P["在会话分支上提出解决方案"]
+  P --> G["所有者批准"]
+  G --> R
+  R --> S["更新相关记忆，冲突文件改为 resolved 并保留"]
+</pre>
+    <figcaption>v0.1 让 LLM 按策略自动裁决；v0.2 默认让 LLM 只做标记、双方都保留，因为已有研究质疑让 LLM 做最终裁决。解决后的冲突文件保留下来，作为决策记录。</figcaption>
+  </figure>
+</section>
+
+<!-- 9 -->
+<section id="fig-lifecycle">
+  <div class="fig-head">
+    <span class="fig-no">图 9 · 操作</span>
+    <h2>一条记忆的生命周期</h2>
+    <p class="claim">每个状态变化都对应一种提交类型（<code>Pmf-Op</code>），所以任何一次变化都能在历史中查到、也能撤销，只有 redact 例外。</p>
+  </div>
+  <figure>
+<pre class="mermaid">
+stateDiagram-v2
+  state "会话分支 · 待合并" as session
+  state "长期记忆 · main" as main
+  state "冲突中 · 双方保留" as conflict
+  state "已被取代 · 带 valid_to" as superseded
+  state "软遗忘 · 只在历史中" as soft
+  state "已删除 · 墓碑" as gone
+  [*] --> session: remember
+  session --> [*]: 所有者拒绝合并
+  session --> main: merge 获批
+  main --> main: correct 原地更正 · squash
+  main --> conflict: 发现矛盾
+  conflict --> main: resolve
+  main --> superseded: 世界变化 · 新记忆 supersedes
+  superseded --> soft: forget
+  main --> soft: forget
+  soft --> main: 再次需要时恢复
+  main --> gone: redact
+  soft --> gone: redact
+  gone --> [*]
+</pre>
+    <figcaption>“已被取代”的记忆仍在当前树中，因为它描述的过去仍然是事实。软遗忘只是从当前树中移除；只有 <code>redact</code> 会真正删除数据，并且必须由所有者签名。</figcaption>
+  </figure>
+</section>
+
+<div class="part">四 · 信任</div>
+
+<!-- 10 -->
+<section id="fig-tombstone">
+  <div class="fig-head">
+    <span class="fig-no">图 10 · 信任</span>
+    <h2>墓碑：让删除传播到每一个副本</h2>
+    <p class="claim">在本地改写历史删不掉别人克隆里的数据。墓碑随同步传播，所有遵守规范的副本拉取后都必须删除对应数据。</p>
+  </div>
+  <figure>
+<pre class="mermaid">
+sequenceDiagram
+  participant O as 所有者 · 设备 A
+  participant R as 远端仓库
+  participant B as 设备 B
+  participant C as AI 的克隆
+  O->>O: 删除文件，追加墓碑，签名后提交 redact
+  O->>R: git push
+  B->>R: git pull
+  R-->>B: 新墓碑
+  B->>B: 校验所有者签名
+  B->>B: 从所有分支的当前树中删除
+  B->>B: 清除索引、embedding、缓存
+  B->>B: 下次维护时改写本地历史并清除对象
+  C->>R: git pull
+  R-->>C: 新墓碑
+  C->>C: 执行同样步骤，签名不符则拒绝
+  Note over O,C: 墓碑只记录 id 和对象哈希，不包含被删除的内容
+</pre>
+    <figcaption>这是“被遗忘权”在格式层面的落实。墓碑必须由所有者签名，防止 AI 伪造删除来抹掉对自己不利的记录。</figcaption>
+  </figure>
+</section>
+
+<!-- 11 -->
+<section id="fig-scope">
+  <div class="fig-head">
+    <span class="fig-no">图 11 · 信任</span>
+    <h2>权限范围与视图：同一个仓库，各自看到不同的部分</h2>
+    <p class="claim">权限按记忆的主体（<code>about</code>）和敏感级别授予；视图按路径从 main 生成一个只读分支，用来分享一部分记忆。</p>
+  </div>
+  <figure>
+    <div class="tbl">
+      <table>
+        <thead>
+          <tr>
+            <th>记忆</th>
+            <th>敏感级别</th>
+            <th>Claude Code<small>about: self, project:*<br>≤ personal</small></th>
+            <th>本地小模型<small>about: project:*<br>≤ public</small></th>
+            <th>view/work 视图<small>projects/** procedures/**<br>≤ public</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>projects/si-ag/goal.md</code></td><td><span class="lvl public">public</span></td><td class="c yes">可读</td><td class="c yes">可读</td><td class="c yes">包含</td></tr>
+          <tr><td><code>procedures/run-python.md</code><br><small>about: self</small></td><td><span class="lvl public">public</span></td><td class="c yes">可读</td><td class="c no">—</td><td class="c yes">包含</td></tr>
+          <tr><td><code>self/preferences/language.md</code></td><td><span class="lvl personal">personal</span></td><td class="c yes">可读</td><td class="c no">—</td><td class="c no">—</td></tr>
+          <tr><td><code>self/health/sleep.md</code></td><td><span class="lvl sensitive">sensitive</span></td><td class="c no">需显式授权</td><td class="c no">—</td><td class="c no">—</td></tr>
+          <tr><td><code>self/secrets/wifi.md</code></td><td><span class="lvl secret">secret</span></td><td class="c lock">加密</td><td class="c lock">加密</td><td class="c no">不得出现</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figcaption>第二行说明两种机制的区别：<code>run-python.md</code> 的主体是 <code>self</code>，本地小模型的范围只有 <code>project:*</code>，所以读不到；但视图按路径筛选，<code>procedures/**</code> 被包含进去。<code>secret</code> 级别的正文用 age 加密，即使仓库托管在第三方平台也无法读取。</figcaption>
+  </figure>
+</section>
+
+<!-- 12 -->
+<section id="fig-levels">
+  <div class="fig-head">
+    <span class="fig-no">图 12 · 生态</span>
+    <h2>一致性等级：每一级都包含上一级</h2>
+    <p class="claim">实现可以只支持一部分，但要声明自己达到的等级，并通过规范附带的一致性测试。</p>
+  </div>
+  <figure>
+    <div class="levels">
+      <div>
+        <div class="bar" style="width:25%"></div>
+        <span class="tag">L0</span>
+        <h3>读取器</h3>
+        <ul>
+          <li>解析仓库与记忆文件</li>
+          <li>保留未知字段和扩展目录</li>
+          <li>遵守墓碑与读取范围</li>
+        </ul>
+      </div>
+      <div>
+        <div class="bar" style="width:50%"></div>
+        <span class="tag">L1</span>
+        <h3>写入器</h3>
+        <span class="inherit">L0 +</span>
+        <ul>
+          <li>按格式写入记忆和来源</li>
+          <li>提交带 <code>Pmf-Op</code></li>
+          <li>只写会话分支</li>
+        </ul>
+      </div>
+      <div>
+        <div class="bar" style="width:75%"></div>
+        <span class="tag">L2</span>
+        <h3>合并器</h3>
+        <span class="inherit">L1 +</span>
+        <ul>
+          <li>合并会话分支</li>
+          <li>按格式记录冲突</li>
+          <li>提交 resolve</li>
+        </ul>
+      </div>
+      <div>
+        <div class="bar" style="width:100%"></div>
+        <span class="tag">L3</span>
+        <h3>完整实现</h3>
+        <span class="inherit">L2 +</span>
+        <ul>
+          <li>生成视图</li>
+          <li>加密与签名校验</li>
+          <li>传播墓碑</li>
+        </ul>
+      </div>
+    </div>
+    <figcaption>测试示例：“拉取墓碑后指定记忆必须消失”“修改记忆后未知字段必须保留”。规范的新特性至少要有两个独立实现验证过，才能写进规范。</figcaption>
+  </figure>
+</section>
+
+<div class="part">五 · 参考实现（Locket Cloud）</div>
+
+<!-- 13 -->
+<section id="fig-arch">
+  <div class="fig-head">
+    <span class="fig-no">图 13 · 参考实现</span>
+    <h2>云上记忆存储的架构：很多人，各有一个仓</h2>
+    <p class="claim">同一套记忆语义，三种入口——浏览器、Agent、命令行。Locket 只做"记忆语义层"，账号与托管交给 Gitea；每个用户一个私有仓，服务层每次请求只打开请求者自己的那个。详见项目根目录 <code>ARCHITECTURE.md</code>。</p>
+  </div>
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 960 548" role="img" aria-label="分层架构：顶部三种客户端——高级用户的 CLI、用户的浏览器 Vue 单页应用、Agent 的 MCP。浏览器经 Go 服务器（OAuth、静态站、/api 反代），Agent 经 MCP 服务器，二者汇入 Locket 服务层 service.py（可插拔租户 resolver 与 scope 读写强制）。服务层下接引擎 store.py（分支合并、冲突、双时态、墓碑、同步）与派生 SQLite 读索引，再下是作为源真相的 git 仓，最底是自托管 Gitea 负责账号、每用户私有仓与 git 传输。CLI 直接复用引擎操作本地仓。右侧是后期的认知层大脑，语义召回等能力从存储派生。">
+        <!-- clients -->
+        <rect class="box" x="40" y="22" width="200" height="58" rx="5"/>
+        <text class="t-title" x="140" y="46" text-anchor="middle">高级用户 · CLI</text>
+        <text class="t-sub" x="140" y="65" text-anchor="middle">locket 命令行</text>
+
+        <rect class="box" x="380" y="22" width="200" height="58" rx="5"/>
+        <text class="t-title" x="480" y="46" text-anchor="middle">用户 · 浏览器</text>
+        <text class="t-sub" x="480" y="65" text-anchor="middle">Vue 3 + TS 单页应用</text>
+
+        <rect class="box" x="720" y="22" width="200" height="58" rx="5"/>
+        <text class="t-title" x="820" y="46" text-anchor="middle">Agent</text>
+        <text class="t-sub" x="820" y="65" text-anchor="middle">Claude Code 等 · MCP</text>
+
+        <!-- adapters -->
+        <rect class="box" x="380" y="114" width="200" height="56" rx="5"/>
+        <text class="t-title" x="480" y="137" text-anchor="middle">Go 服务器</text>
+        <text class="t-sub" x="480" y="156" text-anchor="middle">OAuth · 静态站 · /api 反代</text>
+
+        <rect class="box" x="720" y="114" width="200" height="56" rx="5"/>
+        <text class="t-title" x="820" y="137" text-anchor="middle">MCP 服务器</text>
+        <text class="t-sub" x="820" y="156" text-anchor="middle">mcp.py · 工具适配</text>
+
+        <line class="edge" x1="480" y1="80" x2="480" y2="114" marker-end="url(#ar)"/>
+        <line class="edge" x1="820" y1="80" x2="820" y2="114" marker-end="url(#ar)"/>
+
+        <!-- CLI direct to engine -->
+        <path class="edge dashed" d="M140 80 V326 H258" fill="none" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="150" y="210">本地直用引擎</text>
+
+        <!-- service layer -->
+        <rect class="box-main" x="260" y="206" width="440" height="66" rx="6"/>
+        <text class="t-title" x="480" y="230" text-anchor="middle">Locket 服务层 · service.py</text>
+        <text class="t-sub" x="480" y="249" text-anchor="middle">MemoryService · 可插拔租户 resolver · scope 读写强制</text>
+        <text class="t-mono t-sub" x="480" y="265" text-anchor="middle">recall / remember / why / forget …（SPEC §8）</text>
+
+        <line class="edge-main" x1="480" y1="170" x2="480" y2="206" marker-end="url(#ar-main)"/>
+        <line class="edge-main" x1="820" y1="170" x2="650" y2="206" marker-end="url(#ar-main)"/>
+
+        <!-- engine -->
+        <rect class="box" x="260" y="304" width="440" height="60" rx="5"/>
+        <text class="t-title" x="360" y="328" text-anchor="middle">引擎 · store.py</text>
+        <text class="t-sub" x="360" y="347" text-anchor="middle">分支合并 · 冲突 · 双时态 · 墓碑 · 同步</text>
+        <rect class="box ghost" x="558" y="316" width="130" height="36" rx="4"/>
+        <text class="t-mono t-sub" x="623" y="338" text-anchor="middle">SQLite 读索引</text>
+
+        <line class="edge-main" x1="480" y1="272" x2="480" y2="304" marker-end="url(#ar-main)"/>
+
+        <!-- storage: git -->
+        <rect class="box-main" x="260" y="396" width="440" height="54" rx="5"/>
+        <text class="t-title" x="480" y="419" text-anchor="middle">git 仓 · 源真相</text>
+        <text class="t-sub" x="480" y="438" text-anchor="middle">markdown 记忆 · 可审计 · 可带走</text>
+        <line class="edge" x1="480" y1="364" x2="480" y2="396" marker-end="url(#ar)"/>
+
+        <!-- host: gitea -->
+        <rect class="band" x="260" y="474" width="440" height="54" rx="5"/>
+        <text class="t-title" x="480" y="497" text-anchor="middle">Gitea（自托管）</text>
+        <text class="t-sub" x="480" y="516" text-anchor="middle">账号 · OAuth2 · 每用户私有仓 · 访问控制 · git 传输</text>
+        <line class="edge-main" x1="480" y1="450" x2="480" y2="474" marker-start="url(#ar-main)" marker-end="url(#ar-main)"/>
+        <text class="t-mono t-sub" x="492" y="468">push / pull · 每用户副本</text>
+
+        <!-- storage bracket -->
+        <text class="t-band t-main" transform="translate(246,462) rotate(-90)" text-anchor="middle">存储层 · 源真相</text>
+
+        <!-- cognition / brain, derived -->
+        <rect class="box ghost" x="744" y="300" width="186" height="68" rx="6"/>
+        <text class="t-title" x="837" y="324" text-anchor="middle">认知层 · 大脑</text>
+        <text class="t-sub" x="837" y="342" text-anchor="middle">语义召回（向量库）· 巩固</text>
+        <text class="t-sub" x="837" y="358" text-anchor="middle">冲突裁决 · 遗忘（后期）</text>
+        <line class="edge dashed" x1="744" y1="334" x2="702" y2="334" marker-end="url(#ar)"/>
+        <text class="t-mono t-sub" x="723" y="326" text-anchor="middle">派生</text>
+      </svg>
+    </div>
+    <figcaption>设计原则：<b>不重造账号、存储、权限、git 传输</b>——这些 Gitea 已久经考验。隔离靠 Gitea 的仓级权限，服务层对每个请求只打开请求者的仓。<code>secret</code> 级记忆端到端加密，平台读不到明文。向量数据库属于<b>认知层（大脑）</b>的语义召回，派生于存储、可随时重建，不是记忆本体。</figcaption>
+  </figure>
+</section>
+
+<!-- 14 -->
+<section id="fig-usecase">
+  <div class="fig-head">
+    <span class="fig-no">图 14 · 参考实现</span>
+    <h2>谁用它做什么</h2>
+    <p class="claim">三类参与者：<span class="t-main">所有者</span>拥有最终权力（批准、解决冲突、分享、删除）；<span style="color:var(--muted)">普通用户</span>通过浏览器日常读写；<span class="t-sess">Agent</span> 通过 MCP 自动记录与检索。颜色区分每条连线属于谁。</p>
+  </div>
+  <figure>
+    <div class="scroll">
+      <svg viewBox="0 0 960 724" role="img" aria-label="用例图。系统边界 Locket Cloud 内有 11 个用例，自上而下：登录、检索、记住、更正、情况变化、遗忘、同步、解决冲突、合并审批、生成分享视图、删除。左侧普通用户连到登录、检索、记住、更正、遗忘、同步；左下 Agent 连到检索、记住、更正、情况变化、遗忘；右侧所有者连到解决冲突、合并审批、生成分享视图、删除，并拥有普通用户的全部用例。删除用例以红色标出。">
+        <!-- boundary -->
+        <rect class="box" x="332" y="26" width="296" height="672" rx="10" fill="none"/>
+        <text class="t-band" x="480" y="18" text-anchor="middle">Locket Cloud · 系统边界</text>
+
+        <!-- actor: 普通用户 (muted) -->
+        <g stroke="var(--muted)" stroke-width="2" fill="none" stroke-linecap="round">
+          <circle cx="88" cy="150" r="11" fill="var(--surface)"/>
+          <line x1="88" y1="161" x2="88" y2="196"/>
+          <line x1="68" y1="174" x2="108" y2="174"/>
+          <line x1="88" y1="196" x2="72" y2="220"/>
+          <line x1="88" y1="196" x2="104" y2="220"/>
+        </g>
+        <text class="t-title m-muted" x="88" y="242" text-anchor="middle" style="fill:var(--muted)">普通用户</text>
+        <text class="t-sub" x="88" y="260" text-anchor="middle">浏览器</text>
+
+        <!-- actor: Agent (sess) -->
+        <g stroke="var(--sess)" stroke-width="2" fill="none" stroke-linecap="round">
+          <circle cx="88" cy="430" r="11" fill="var(--surface)"/>
+          <line x1="88" y1="441" x2="88" y2="476"/>
+          <line x1="68" y1="454" x2="108" y2="454"/>
+          <line x1="88" y1="476" x2="72" y2="500"/>
+          <line x1="88" y1="476" x2="104" y2="500"/>
+        </g>
+        <text class="t-title t-sess" x="88" y="522" text-anchor="middle">Agent</text>
+        <text class="t-sub" x="88" y="540" text-anchor="middle">经 MCP</text>
+
+        <!-- actor: 所有者 (main) -->
+        <g stroke="var(--main)" stroke-width="2" fill="none" stroke-linecap="round">
+          <circle cx="874" cy="520" r="11" fill="var(--surface)"/>
+          <line x1="874" y1="531" x2="874" y2="566"/>
+          <line x1="854" y1="544" x2="894" y2="544"/>
+          <line x1="874" y1="566" x2="858" y2="590"/>
+          <line x1="874" y1="566" x2="890" y2="590"/>
+        </g>
+        <text class="t-title t-main" x="874" y="612" text-anchor="middle">所有者</text>
+        <text class="t-sub" x="874" y="630" text-anchor="middle">最终权力</text>
+
+        <!-- connections (drawn before ovals so ovals cover endpoints) -->
+        <!-- user -> login, recall, remember, correct, forget, sync -->
+        <g class="edge">
+          <line x1="118" y1="150" x2="384" y2="64"/>
+          <line x1="118" y1="150" x2="384" y2="124"/>
+          <line x1="120" y1="158" x2="384" y2="184"/>
+          <line x1="120" y1="166" x2="384" y2="244"/>
+          <line x1="122" y1="176" x2="384" y2="364"/>
+          <line x1="122" y1="182" x2="384" y2="424"/>
+        </g>
+        <!-- agent -> recall, remember, correct, supersede, forget -->
+        <g class="edge-sess">
+          <line x1="120" y1="420" x2="384" y2="128"/>
+          <line x1="120" y1="424" x2="384" y2="188"/>
+          <line x1="120" y1="428" x2="384" y2="246"/>
+          <line x1="120" y1="432" x2="384" y2="304"/>
+          <line x1="120" y1="438" x2="384" y2="362"/>
+        </g>
+        <!-- owner -> resolve, approve, view, redact -->
+        <g class="edge-main">
+          <line x1="844" y1="518" x2="576" y2="484"/>
+          <line x1="844" y1="520" x2="576" y2="544"/>
+          <line x1="846" y1="524" x2="576" y2="604"/>
+          <line x1="846" y1="528" x2="576" y2="664"/>
+        </g>
+
+        <!-- use-case ovals -->
+        <ellipse class="box" cx="480" cy="64" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="62" text-anchor="middle">登录</text>
+        <text class="t-mono t-sub" x="480" y="78" text-anchor="middle">Gitea OAuth</text>
+
+        <ellipse class="box" cx="480" cy="124" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="122" text-anchor="middle">检索</text>
+        <text class="t-mono t-sub" x="480" y="138" text-anchor="middle">recall</text>
+
+        <ellipse class="box" cx="480" cy="184" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="182" text-anchor="middle">记住</text>
+        <text class="t-mono t-sub" x="480" y="198" text-anchor="middle">remember</text>
+
+        <ellipse class="box" cx="480" cy="244" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="242" text-anchor="middle">更正（记错了）</text>
+        <text class="t-mono t-sub" x="480" y="258" text-anchor="middle">correct</text>
+
+        <ellipse class="box" cx="480" cy="304" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="302" text-anchor="middle">情况变化</text>
+        <text class="t-mono t-sub" x="480" y="318" text-anchor="middle">supersede</text>
+
+        <ellipse class="box" cx="480" cy="364" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="362" text-anchor="middle">遗忘</text>
+        <text class="t-mono t-sub" x="480" y="378" text-anchor="middle">forget</text>
+
+        <ellipse class="box" cx="480" cy="424" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="422" text-anchor="middle">同步</text>
+        <text class="t-mono t-sub" x="480" y="438" text-anchor="middle">pull · push</text>
+
+        <ellipse class="box-main" cx="480" cy="484" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="482" text-anchor="middle">解决冲突</text>
+        <text class="t-mono t-sub" x="480" y="498" text-anchor="middle">resolve</text>
+
+        <ellipse class="box-main" cx="480" cy="544" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="542" text-anchor="middle">合并审批</text>
+        <text class="t-mono t-sub" x="480" y="558" text-anchor="middle">approve merge</text>
+
+        <ellipse class="box-main" cx="480" cy="604" rx="96" ry="23"/>
+        <text class="t-title" x="480" y="602" text-anchor="middle">生成分享视图</text>
+        <text class="t-mono t-sub" x="480" y="618" text-anchor="middle">view</text>
+
+        <ellipse class="box-danger" cx="480" cy="664" rx="96" ry="23"/>
+        <text class="t-title t-danger" x="480" y="662" text-anchor="middle">删除</text>
+        <text class="t-mono t-sub" x="480" y="678" text-anchor="middle">redact + 墓碑</text>
+      </svg>
+    </div>
+    <figcaption><b>会话分支即 Pull Request</b>（图 6）：Agent 只写自己的会话分支，合并进 <span class="t-main">main</span> 需所有者<b>合并审批</b>。所有者同时拥有普通用户的全部用例；<span class="t-danger">删除</span>（redact）写入墓碑并随同步传播到每个副本（图 10）。当前实现：读写强制、同步、墓碑、视图、加密已落地，合并审批界面在建。</figcaption>
+  </figure>
+</section>
+
+<!-- 15 -->
+<section id="fig-tenancy">
+  <div class="fig-head">
+    <span class="fig-no">图 15 · 参考实现</span>
+    <h2>一次多租户请求：从浏览器到你自己的仓</h2>
+    <p class="claim">登录一次换到会话里的 token，之后每个 <code>/api</code> 请求都带着它。服务层用这个 token 定位"该用户的仓"，并只返回读取范围内的记忆——请求者永远只看到自己的记忆。</p>
+  </div>
+  <figure>
+<pre class="mermaid">
+sequenceDiagram
+  participant U as 用户 · 浏览器
+  participant G as Go 服务器
+  participant GT as Gitea
+  participant S as Locket 服务层
+  participant R as 该用户的记忆仓
+  U->>G: 访问页面（未登录）
+  G->>GT: 跳转 Gitea OAuth 授权
+  GT-->>U: 登录并授权
+  U->>G: 回调带授权码
+  G->>GT: 换 access_token，查 /api/v1/user
+  G->>G: 写入签名会话 cookie（含 token）
+  U->>G: /api/recall 我的偏好
+  G->>S: 反代，注入 Bearer token
+  S->>GT: 用 token 定位该用户的私有仓
+  S->>R: 在用户副本上检索，按 scope 过滤
+  S-->>U: 只返回该用户、读取范围内的记忆
+  Note over S,R: 每请求只打开请求者的仓，绝不跨租户
+</pre>
+    <figcaption>Go 服务器把 Gitea 的 token 封进 <b>签名的 httpOnly 会话 cookie</b>，不写入日志；反代时才注入到对上游的请求。服务层的 <code>scope</code> 再按 <code>about</code> 与敏感级别过滤——即便同一个仓，不同 Agent 看到的记忆也可以不同。</figcaption>
+  </figure>
+</section>
+
+<footer>Locket · Portable Memory Format（PMF）v0.2 草案 · 格式见 SPEC.md，参考实现架构见 ARCHITECTURE.md · 图 1–12 格式规范，图 13–15 云上实现 · 2026-10-30</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+<script>
+  if (window.mermaid) {
+    var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "neutral", fontFamily: "Noto Sans SC, Microsoft YaHei, sans-serif" });
+  }
+</script>

@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "locket-memory"
+version = "0.1.0"
+description = "Locket: user-owned, portable AI memory. Reference implementation of the Portable Memory Format (PMF)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = ["PyYAML>=6", "tomli>=2; python_version < '3.11'"]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.26,<2"]        # Pin the tested MCP SDK major; stdio + Streamable HTTP.
+secret = ["cryptography>=42"]  # `pip install locket-memory[secret]` 支持 secret 级加密
+model = ["sentence-transformers>=2.2"]  # `pip install locket-memory[model]` 本地模型 embedding
+
+[project.scripts]
+locket = "locket.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

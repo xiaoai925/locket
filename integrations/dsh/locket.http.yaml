@@ -1,0 +1,12 @@
+# One credential per tenant/channel; never place the bearer token in this file.
+- insert:
+    - id: memory-locket
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: locket
+        transport: streamable-http
+        url: !!js process.env.LOCKET_MCP_URL
+        expandTemplates: true
+        headers:
+          Authorization: 'Bearer ${credential:LOCKET_MCP_TOKEN}'
+        failOnStartupError: true

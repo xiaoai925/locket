@@ -1,0 +1,28 @@
+[Unit]
+Description=Locket authenticated memory MCP
+After=network.target
+
+[Service]
+Type=simple
+User=locketmcp
+Group=locketmcp
+WorkingDirectory=/var/lib/locket-mcp
+Environment=HOME=/var/lib/locket-mcp
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/etc/locket-mcp/service.env
+ExecStart=/opt/locket-mcp/venv/bin/python -m locket mcp --transport streamable-http --host 127.0.0.1 --port 8724 --grants /etc/locket-mcp/grants.json --resource-url ${LOCKET_RESOURCE_URL}
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/locket-mcp
+RestrictSUIDSGID=true
+MemoryMax=512M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

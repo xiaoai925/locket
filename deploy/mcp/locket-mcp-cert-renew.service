@@ -1,0 +1,8 @@
+[Unit]
+Description=Renew Locket HTTPS certificate and reload nginx
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/locket-mcp/venv/bin/certbot renew --quiet --cert-name locket-mcp-ip --deploy-hook "/usr/sbin/nginx -t && /bin/systemctl reload nginx"

@@ -1,0 +1,44 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# ---- Node / Vue (web/app) ----
+node_modules/
+web/app/dist/
+.vite/
+*.local
+
+# ---- Go (web/server) ----
+web/server/locket-web
+web/server/*.exe
+
+# ---- Secrets / local config ----
+.env
+.env.*
+!.env.example
+
+# ---- Local memory / tenant data ----
+*.sqlite
+/tenants/
+
+# ---- Editors / OS ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ---- 本地交接笔记（不公开）----
+/HANDOFF.md

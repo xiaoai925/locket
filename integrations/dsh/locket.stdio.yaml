@@ -1,0 +1,15 @@
+# DSH config patch; reference: deepseek-harness fcc0ad462172522aaf5c93a7b2e01f6b9f0b0159
+# Set LOCKET_PYTHON, LOCKET_HOME, LOCKET_SCOPE_JSON in the host environment first.
+- insert:
+    - id: memory-locket
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: locket
+        transport: stdio
+        command: !!js process.env.LOCKET_PYTHON
+        args: ['-m', 'locket', 'mcp']
+        env:
+          LOCKET_HOME: !!js process.env.LOCKET_HOME
+          LOCKET_AGENT: deepseek-harness
+          LOCKET_SCOPE_JSON: !!js process.env.LOCKET_SCOPE_JSON
+        failOnStartupError: true
